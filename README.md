@@ -3,17 +3,23 @@ Lein AWS Elastic Beanstalk publisher is based on v1.10.77 of the AWS SDK. This i
 
 It is likely quite sharp around the edges as it currently addresses the happy-path.
 
-# License
+## License
 Eclipse Public License - v1.0: <https://eclipse.org/org/documents/epl-v10.html>
 
-# Development
+## Development
 lein install
 
-# Using
+## Usage
 
 Add the following to every project that you want to use EB with:
 
 `[lein-eb 0.0.0-SNAPSHOT]`
+
+Upload an application version:
+
+`lein eb publish $ASSET $LABEL`
+
+## AWS Authentication
 
 From SDK v1.10.77 Javadocs:
 
@@ -24,5 +30,7 @@ From SDK v1.10.77 Javadocs:
 > * Credential profiles file at the default location (~/.aws/credentials) shared by all AWS SDKs and the AWS CLI
 > * Instance profile credentials delivered through the Amazon EC2 metadata service
 >
+
+## AWS Regions
 
 To target a territory other than "us-east-1" set an environment variable for `AWS_DEFAULT_REGION` to the appropriate region.
