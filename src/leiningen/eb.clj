@@ -1,5 +1,7 @@
 (ns leiningen.eb
-  (:require [leiningen.eb.beanstalk :as beanstalk])
+  (:require [leiningen.eb.beanstalk :as beanstalk]
+            [leiningen.eb.s3 :as s3]
+            [clojure.java.io :as io])
   (:use [leiningen.help :only [help-for]]))
 
 ; significant inspiration taken from https://github.com/weavejester/lein-beanstalk
@@ -26,17 +28,23 @@
   ([project env-name]
    (println "info" (:name project) env-name)))
 
-
 (defn publish
   "Publish asset to the applications S3 bucket."
   ([project]
    (println (help-for "eb")))
+
   ([project file label]
-   ; retrieve bucket name.
-   ; hash file.
-   ; upload to S3.
-   ; publish S3Location as version.
-   (println file label)))
+   (let [f (io/file file)
+         k (s3/gen-key f)
+         ; retrieve bucket name.
+         b (beanstalk/get-bucket project)]
+     (print "Uploading" file "to" (str "s3://" b "/" k) "...")
+     ; upload to S3.
+     (s3/upload b k f)
+     (println "done")
+     (print "Publishing as label" label "...")
+     (beanstalk/set-label project label b k)
+     (println "done"))))
 
 (defn eb
   "Manage AWS Elastic Beanstalk service."
