@@ -13,7 +13,7 @@ lein install
 
 Add the following to every project that you want to use EB with:
 
-`[lein-eb 0.0.0-SNAPSHOT]`
+[![Clojars Project](https://img.shields.io/clojars/v/lein-eb.svg)](https://clojars.org/lein-eb)
 
 Upload an application version:
 
