@@ -39,10 +39,12 @@
          ; retrieve bucket name.
          b (beanstalk/get-bucket project)]
      (print "Uploading" file "to" (str "s3://" b "/" k) "...")
+     (flush)
      ; upload to S3.
      (s3/upload b k f)
      (println "done")
      (print "Publishing as label" label "...")
+     (flush)
      (beanstalk/set-label project label b k)
      (println "done"))))
 
