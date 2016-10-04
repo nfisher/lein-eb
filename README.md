@@ -1,4 +1,7 @@
 # lein-eb
+
+[![Clojars Project](https://img.shields.io/clojars/v/lein-eb.svg)](https://clojars.org/lein-eb)
+
 Lein AWS Elastic Beanstalk publisher is based on v1.10.77 of the AWS SDK. This is the newest version that is compatible as of lein 2.7.1.
 
 It is likely quite sharp around the edges as it currently addresses the happy-path.
@@ -11,9 +14,7 @@ lein install
 
 ## Usage
 
-Add the following to every project that you want to use EB with:
-
-[![Clojars Project](https://img.shields.io/clojars/v/lein-eb.svg)](https://clojars.org/lein-eb)
+Add the dependency to your lein :plugins for every project that you use ElasticBeanstalk with.
 
 Upload an application version:
 
