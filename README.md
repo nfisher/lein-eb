@@ -35,3 +35,4 @@ From SDK v1.10.77 Javadocs:
 ## AWS Regions
 
 To target a territory other than "us-east-1" set an environment variable for `AWS_DEFAULT_REGION` to the appropriate region.
+
