@@ -8,13 +8,14 @@
     com.amazonaws.services.elasticbeanstalk.model.DescribeEnvironmentsRequest
     com.amazonaws.services.elasticbeanstalk.model.DescribeApplicationVersionsRequest
     com.amazonaws.services.elasticbeanstalk.model.S3Location
+    com.amazonaws.services.elasticbeanstalk.model.UpdateEnvironmentRequest
     ))
 
 (defn- region [project]
   """
   region returns the default region to use from the standard AWS_DEFAULT_REGION env var.
   """
-  (let [aws-region (or (System/getenv "AWS_DEFAULT_REGION") "us-east-1")]
+  (let [aws-region (or (System/getenv "AWS_DEFAULT_REGION") "eu-west-1")]
     (Regions/fromName aws-region)))
 
 (defn- beanstalk-client [project]
@@ -31,6 +32,12 @@
 (defn- ver-request [project]
   (doto (DescribeApplicationVersionsRequest.)
     (.setApplicationName (:name project))))
+
+(defn- update-env-ver-request [project env version]
+  (doto (UpdateEnvironmentRequest.)
+    (.setApplicationName (:name project))
+    (.setEnvironmentName env)
+    (.setVersionLabel version)))
 
 (defn- source-bundle [b k]
   (S3Location. b k))
@@ -67,3 +74,7 @@
 (defn set-label [project label bucket s3key]
   (-> (beanstalk-client project)
       (.createApplicationVersion (create-ver-request project label bucket s3key))))
+
+(defn update-env-version [project env version]
+  (-> (beanstalk-client project)
+      (.updateEnvironment (update-env-ver-request project env version))))

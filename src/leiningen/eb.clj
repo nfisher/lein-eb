@@ -28,6 +28,14 @@
   ([project env-name]
    (println "info" (:name project) env-name)))
 
+(defn deploy
+  "Deploy application version to environment."
+  ([project]
+   (println (help-for "eb")))
+
+  ([project env version]
+   (beanstalk/update-env-version project env version)))
+
 (defn publish
   "Publish asset to the applications S3 bucket."
   ([project]
@@ -50,8 +58,8 @@
 
 (defn eb
   "Manage AWS Elastic Beanstalk service."
-  {:help-argslist '([info publish])
-   :subtasks [#'info #'publish]}
+  {:help-argslist '([info publish deploy])
+   :subtasks [#'info #'publish #'deploy]}
 
   ([project]
    (println (help-for "eb")))
@@ -60,4 +68,5 @@
    (case subtask
      "info"    (apply info project args)
      "publish" (apply publish project args)
+     "deploy" (apply deploy project args)
      (println (help-for "eb")))))
