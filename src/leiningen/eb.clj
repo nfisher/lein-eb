@@ -9,21 +9,26 @@
 (defn info
   "Prints details about this projects deployment."
   ([project]
-   (let [app (beanstalk/get-application project)
-         envs (beanstalk/get-environments project)
-         vers (beanstalk/get-versions project)]
-     (println "Application Name:" (.getApplicationName app))
-     (println "  Created       :" (.toString (.getDateCreated app)))
-     (println "  Updated       :" (.toString (.getDateUpdated app)))
-     (println "")
-     (println "Environments    :")
-     (doseq [env envs]
-       (println "  "
-                (.getEnvironmentName env)
-                (.getVersionLabel env)))
+   (try 
+     (let [app (beanstalk/get-application project)]
+       (println (:name project))
+       (println "Application Name:" (.getApplicationName app))
+       (println "  Created       :" (.toString (.getDateCreated app)))
+       (println "  Updated       :" (.toString (.getDateUpdated app)))
+       (println "")
+       (println "Environments    :"))
+
+     (let [envs (beanstalk/get-environments project)]
+       (doseq [env envs]
+         (println "  "
+                  (.getEnvironmentName env)
+                  (.getVersionLabel env))))
      (println "Versions        :")
-     (doseq [ver vers]
-       (println (.getVersionLabel ver) (.getS3Bucket (.getSourceBundle ver))))))
+     (let [vers (beanstalk/get-versions project)]
+       (doseq [ver vers]
+         (println (.getVersionLabel ver))))
+     (catch Exception e
+       (println (.getMessage e)))))
 
   ([project env-name]
    (println "info" (:name project) env-name)))

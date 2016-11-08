@@ -18,12 +18,17 @@
   (let [aws-region (or (System/getenv "AWS_DEFAULT_REGION") "eu-west-1")]
     (Regions/fromName aws-region)))
 
+(def bc (atom nil))
+
 (defn- beanstalk-client [project]
   """
   beanstalk-client builds the client connector for an AWS beanstalk end-point.
   """
-  (doto (AWSElasticBeanstalkClient. (DefaultAWSCredentialsProviderChain.))
-    (.withRegion (region project))))
+  (let [c (AWSElasticBeanstalkClient. (DefaultAWSCredentialsProviderChain.))]
+    (if (compare-and-set! bc nil c)
+      (doto c
+        (.withRegion (region project)))
+      (deref bc))))
 
 (defn- env-request [project]
   (doto (DescribeEnvironmentsRequest.)
